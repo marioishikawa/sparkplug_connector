@@ -2,7 +2,7 @@
 
 # **PLCnext_Sparkplug**
 
-### This repo is meant to host our implemantation of Sparkplug MQTT for PLCnext Controllers. 
+### This repo is meant to host our implementation of Sparkplug MQTT for PLCnext Controllers. 
 ### Here you will find How to install and How to use it for your Ignition applications
 
 ### **1 Connector Installation**
@@ -21,7 +21,7 @@ Supported hardware
 
 1. Connect the AXC F controller to Internet-Provider
 2. Start the terminal on Linux OS or Shell capable software ([Putty](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html) or [Moba](https://mobaxterm.mobatek.net/download.html)) and establish the SSH-Connection to PLC via command line "ssh admin@192.168.1.10" (your password should be set in the User authentication under WBM).
-3. Change to root via "su -" (root password have to be setup <https://github.com/plcnextusa/PLCnext-Guides/blob/master/Appendices/Appendix%204%20How%20to%20create%20a%20root%20user%20in%20SSH.pdf>)
+3. Change to root via "su" The root user need to be setup [root user guide](<https://github.com/plcnextusa/PLCnext-Guides/blob/master/Appendices/Appendix%204%20How%20to%20create%20a%20root%20user%20in%20SSH.pdf>)
    ![](images/rootuser.gif)
 4. Make sure your Internet connection is intact, via command-line ping http://google.com
    ![](images/ping.gif)
@@ -30,7 +30,7 @@ Supported hardware
 ```bash
  date -s "$(curl -s --head http://google.com | grep ^Date: | sed 's/Date: //g')"
 ```
-### **1.2 Installing Docker**
+### **1.2 Installing Docker** ![](images/docker.png)
 
 After preparing the controller still as a **root** user execute the commands below.
 
@@ -69,7 +69,7 @@ Username: admin   Password: private
 ![](images/plcnexteng2.gif)
 
 
-### **3 Ignition install and configuration**
+### **3 Ignition install and configuration** ![](images/ignitionsmalllogo.jpg)
 
 **Disclamer:** This section is dedicated to installing and setting up a Demo instance of Ignition in your Local machine, all materials used under this section are intellectual property of [Inductive Automation](https://inductiveautomation.com/), please refer to their Website for more information on where and how to acquire their software licenses. Any technical support for Ignition should be requested to Inductive Automation itself, Phoenix Contact have no responsibility and or obligation on supporting it.
 
@@ -92,5 +92,5 @@ After installing Ignition the proper modules for Sparkplug-MQTT need to be insta
 ![](images/ignition3.png)
 ![](images/ignition4.png)
 
-6. Deactivate the SSL authentication (This functionality will be implemented for security in the next release)
+6. Deactivate the SSL authentication (**This functionality will be implemented for security in the next release**)
 ![](images/ignition5.png)
