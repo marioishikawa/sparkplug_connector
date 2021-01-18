@@ -1,0 +1,102 @@
+<%- include('partials/navbar'); %>
+<div class="container">
+    <%- include('partials/jumbotron'); %>
+    <div class="row mt-5">
+        <div class="col-xl-12 m-auto">
+            <div class="card card-body">
+                <h3 class="text-left mb-3"><i class="fas fa-sign-in-alt"></i>Edit Configuration</h3>
+                <%- include('partials/messages'); %>
+                <form action="/edit-config" method="POST">
+                    <div class="form-group">
+                        <label for="serverUrl">Ignition Server URL</label>
+                        <input
+                            type="text"
+                            id="serverUrl"
+                            name="serverUrl"
+                            class="form-control"
+                            placeholder="e.g. tcp://192.168.1.25:1883"
+                            value="<%= deviceConfig.serverUrl %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="groupId">Ignition Group ID</label>
+                        <input
+                            type="text"
+                            id="groupId"
+                            name="groupId"
+                            class="form-control"
+                            placeholder=""
+                            value="<%= deviceConfig.groupId %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="edgeNode">Ignition Edge Node ID</label>
+                        <input
+                            type="text"
+                            id="edgeNode"
+                            name="edgeNode"
+                            class="form-control"
+                            placeholder=""
+                            value="<%= deviceConfig.edgeNode %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="clientId">PLC Client ID</label>
+                        <input
+                            type="text"
+                            id="clientId"
+                            name="clientId"
+                            class="form-control"
+                            placeholder="The ID Ignition will identify your PLC as."
+                            value="<%= deviceConfig.clientId %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="publishInterval">PLC Publish Interval</label>
+                        <input
+                            type="text"
+                            id="publishInterval"
+                            name="publishInterval"
+                            class="form-control"
+                            placeholder="In milliseconds."
+                            value="<%= deviceConfig.publishInterval %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="version">Software Version</label>
+                        <input
+                            type="text"
+                            id="version"
+                            name="version"
+                            class="form-control"
+                            placeholder=""
+                            value="<%= deviceConfig.version %>"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Ignition Server Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-control"
+                            placeholder="Enter Username"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Ignition Server Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control"
+                            placeholder="Enter Password"
+                        />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/footer'); %>
+</div>

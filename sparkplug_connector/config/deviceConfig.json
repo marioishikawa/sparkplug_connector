@@ -1,0 +1,10 @@
+{
+    "serverUrl": "tcp://192.168.1.25:1883",
+    "username": "plcnext",
+    "password": "private",
+    "groupId" : "Sparkplug Devices",
+    "edgeNode" : "PLCnext Edge Node",
+    "clientId": "AXC_F_2152_1",
+    "version" : "spBv1.0",
+    "publishInterval": "1000"
+}

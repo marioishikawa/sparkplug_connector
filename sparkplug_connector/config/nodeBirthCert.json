@@ -1,0 +1,28 @@
+{
+    "timestamp" : "",
+    "metrics" : [
+        {
+            "name" : "Node Control/Rebirth",
+            "type" : "boolean",
+            "value" : false
+        },
+        {
+            "name" : "Template1",
+            "type" : "template",
+            "value" : {
+                "isDefinition" : true,
+                "metrics" : [
+                    { "name" : "myBool", "value" : false, "type" : "boolean" },
+                    { "name" : "myInt", "value" : 0, "type" : "int" }
+                ],
+                "parameters" : [
+                    {
+                        "name" : "param1",
+                        "type" : "string",
+                        "value" : "value1"
+                    }
+                ]
+            }
+        }
+    ]
+}

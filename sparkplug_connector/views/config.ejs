@@ -1,0 +1,51 @@
+<%- include('partials/navbar'); %>
+<div class="container">
+    <%- include('partials/jumbotron'); %>
+    <div class="row mt-5">
+        <div class="col-xl-12 m-auto">
+            <div class="card card-body">
+                <h3 class="text-left mb-3"><i class="fas fa-sign-in-alt"></i>Configuration</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="serverUrl">Ignition Server URL</label>
+                        <div class="form-control">
+                            <%- deviceConfig.serverUrl; -%>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="groupId">Ignition Group ID</label>
+                        <div class="form-control">
+                            <%- deviceConfig.groupId; -%>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="edgeNode">Ignition Edge Node ID</label>
+                        <div class="form-control">
+                            <%- deviceConfig.edgeNode; -%>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientId">PLC Client ID</label>
+                        <div class="form-control">
+                            <%- deviceConfig.clientId; -%>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="publishInterval">PLC Publish Interval</label>
+                        <div class="form-control">     
+                            <%- deviceConfig.publishInterval; -%>
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                        <label for="version">Software Version</label>
+                        <div class="form-control">
+                            <%- deviceConfig.version; -%>
+                        </div>
+                    </div>
+                    <a href="/edit-config" class="btn btn-primary btn-lg btn-full" role="button" aria-disabled="true">Edit</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/footer'); %>
+</div>
