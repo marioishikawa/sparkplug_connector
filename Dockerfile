@@ -1,4 +1,4 @@
-FROM node
+FROM debian
 
 WORKDIR /app
 
@@ -8,6 +8,8 @@ EXPOSE 1883
 EXPOSE 80
 EXPOSE 3010
 
-RUN npm install 
+RUN apt update
+RUN apt upgrade
+RUN apt install node
 
 CMD ["node" , "server.js"]
