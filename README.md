@@ -54,7 +54,7 @@ the Setup script will run and prompt you as below, you must select **Docker** an
 After installing Docker you can pull and run the container with the Sparkplug connector implementation by running the command below. 
 
 ```bash
-docker run -it --restart unless-stopped -p 1883:1883 -p 3010:3010 --privileged --name=plcnext_sparkplug  plcnextusa/sparkplug-connector:buildx-latest
+docker run -it --restart unless-stopped -p 1883:1883 -p 3010:3010 --privileged --name=sparkplug-connector  plcnextusa/sparkplug-connector:buildx-latest
 ```
 After your container is pulled and running you can find the Sparkplug Connector Web configurator running under <plc-ip-address:3010>
 Username: admin   Password: private
@@ -66,7 +66,7 @@ Username: admin   Password: private
 ### **2.1 Creating your project**
 
 1. Create your project with **PLCnext Engineer 2021.0.1 or later !**
-2. Add the desired TAG's from your project as HMI TAG's.
+2. Add the desired TAGs from your project as HMI TAGs.
 ![](images/plcnexteng1.gif) 
 
 3. Activate the WEB API in the Web Browser.
@@ -81,7 +81,7 @@ Username: admin   Password: private
 
 ### **3.1 Ignition install**
 
-Download and install the suitable version of Ignition at https://inductiveautomation.com/downloads after the instalation your Ignition Gateway should be running under http://localhost:8088/ 
+Download and install the suitable version of Ignition at https://inductiveautomation.com/downloads after the installation your Ignition Gateway should be running under http://localhost:8088/ 
 
 
 ### **3.2 Configuring Ignition**
@@ -116,3 +116,30 @@ The Ignition designer launcher cant be fund at the Ignition Gateway main page to
  ![](images/gatewaymainpng.png)
 
 
+Now go to Configuration and set the minimal fields.
+* Ignition Server URL (if running in your local machine that is your PC IP address or whichever remote serve Ignition gateway is running on. **The port is always 1883 unless it has been changed in the Ignition Gateway**)
+* Ignition Server Username ( **"plcnext"** if you follow the previous steps)
+* Ignition Server Password (**"private"** if you followed the previous steps)
+![](images/gatewayconfig.png)
+
+
+ ### **4.2 Running ignition**
+
+ Make sure your Ignition Gateway is running, and launch the Ignition Designer 
+
+![](images/designermain.png)
+
+Connect to the available server and launch it, login with the same credential from ignition Gateway and Create a new project.
+As you Designer starts you will notice the change from yellow to green on the status indicator in the gateway webpage top right (bellow). **If the status don't change please try rebooting your PLC and check again**
+
+![](images/gatewaygreenstatus.png)
+
+Finally, back to your Ignition Designer Navigate to your TAGs and start testing and creating your DEMO project. 
+
+![](images/designerDemo.gif)
+
+Good luck with your Project.
+
+For question, suggestion and bug reports please use the Issues page
+
+https://github.com/plcnextusa/sparkplug_connector/issues
