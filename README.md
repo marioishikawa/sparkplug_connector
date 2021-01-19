@@ -2,6 +2,9 @@
 
 # **PLCnext_Sparkplug**
 
+TODO's
+- [x] SSL implementation under development only use this contribution for testing !
+
 ### This repo is meant to host our implementation of Sparkplug MQTT for PLCnext Controllers. 
 ### Here you will find How to install and How to use it for your Ignition applications
 
@@ -15,7 +18,7 @@ Requirements
   * root User access
 
 Supported hardware
-* AXC F 1152 and AXC F 2152
+* AXC F 1152, AXC F 2152, AXC F 3152 and BPC 1500 series. 
 
 ### **1.1 Preparing Controller**  
 
@@ -35,7 +38,7 @@ Supported hardware
 After preparing the controller still as a **root** user execute the commands below.
 
 ```bash
- git clone https://github.com/PLCnext/Docker_GettingStarted.git 
+git clone https://github.com/PLCnext/Docker_GettingStarted.git 
 
 cd Docker_GettingStarted
 
@@ -51,13 +54,14 @@ the Setup script will run and prompt you as below, you must select **Docker** an
 After installing Docker you can pull and run the container with the Sparkplug connector implementation by running the command below. 
 
 ```bash
-docker run -it --restart unless-stopped -p 1883:1883 -p 3010:3010 --privileged --name=plcnext_sparkplug  yurichamarelli/plcnext_sparkplug
+docker run -it --restart unless-stopped -p 1883:1883 -p 3010:3010 --privileged --name=plcnext_sparkplug  plcnextusa/sparkplug-connector:buildx-latest
 ```
 After your container is pulled and running you can find the Sparkplug Connector Web configurator running under <plc-ip-address:3010>
-![](images/gatewaypage.jpg)
 Username: admin   Password: private
+![](images/gatewaylogin.png)
 
-### **2 PLCnext Engineer**
+
+### **2 PLCnext Engineer** ![](images/plcnextenglogo.png)
 
 ### **2.1 Creating your project**
 
@@ -68,20 +72,23 @@ Username: admin   Password: private
 3. Activate the WEB API in the Web Browser.
 ![](images/plcnexteng2.gif)
 
+4. Deploy and Run your PLCnext Engineer project
+
 
 ### **3 Ignition install and configuration** ![](images/ignitionsmalllogo.jpg)
 
-**Disclamer:** This section is dedicated to installing and setting up a Demo instance of Ignition in your Local machine, all materials used under this section are intellectual property of [Inductive Automation](https://inductiveautomation.com/), please refer to their Website for more information on where and how to acquire their software licenses. Any technical support for Ignition should be requested to Inductive Automation itself, Phoenix Contact have no responsibility and or obligation on supporting it.
+**Disclaimer:** This section is dedicated to installing and setting up a Demo instance of Ignition in your Local machine, all materials used under this section are the intellectual property of [Inductive Automation](https://inductiveautomation.com/), please refer to their Website for more information on where and how to acquire their software licenses. Any technical support for Ignition should be requested to Inductive Automation itself, Phoenix Contact have no responsibility and or obligation on supporting it.
 
 ### **3.1 Ignition install**
 
-Download adn install the suitable version of Ignition at https://inductiveautomation.com/downloads after the instalation your Ignition Gateway should be running under http://localhost:8088/ 
+Download and install the suitable version of Ignition at https://inductiveautomation.com/downloads after the instalation your Ignition Gateway should be running under http://localhost:8088/ 
+
 
 ### **3.2 Configuring Ignition**
 
 After installing Ignition the proper modules for Sparkplug-MQTT need to be installed and configured as well.
 
-1. Watch the the guides for MQTT from Inductive Automation, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 4.
+1. Watch the guides for MQTT from Inductive Automation, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 4.
 2. Download the 2 needed modules for MQTT in ignition **MQTT-Engine** and **MQTT-Distribution** at this [LINK](https://inductiveautomation.com/downloads/third-party-modules/8.1.0).
 3. Install the MQTT modules the way the videos show, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 4.
 4. Configure the MQTT Engine and MQTT Distribution Drivers as below. 
@@ -94,3 +101,18 @@ After installing Ignition the proper modules for Sparkplug-MQTT need to be insta
 
 6. Deactivate the SSL authentication (**This functionality will be implemented for security in the next release**)
 ![](images/ignition5.png)
+
+### **3.3 Ignition Designer**
+
+The Ignition designer launcher cant be fund at the Ignition Gateway main page top right, Install it and go trough the configuration steps. Please refer to their main page([LINK](https://inductiveautomation.com)) if any help is needed on this step. 
+ ![](images/Designerinstall.png)
+
+
+ ### **4 Testing**
+
+ ### **4.1 Sparkplug-Connector**
+
+ If your PLCnext project has been correctly configured and deployed, you should be able to see all your available TAG's in the connector webpage <plc-ip-address:3010>.
+ ![](images/gatewaymainpng.png)
+
+
