@@ -18,7 +18,7 @@ Requirements
   * root User access
 
 Supported hardware
-* AXC F 1152, AXC F 2152, AXC F 3152 and BPC 1500 series. 
+* AXC F 1152, AXC F 2152, AXC F 3152 (**Firmware 2021.0 or later**) and BPC 1500 series. 
 
 ### **1.1 Preparing Controller**  
 
