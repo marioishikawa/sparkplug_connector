@@ -90,7 +90,7 @@ After installing Ignition the proper modules for Sparkplug-MQTT need to be insta
 
 1. Watch the guides for MQTT from Inductive Automation, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 5.
 2. Download the 2 needed modules for MQTT in ignition **MQTT-Engine** and **MQTT-Distributor** at this [LINK](https://inductiveautomation.com/downloads/third-party-modules/8.1.0) (Version 8.0.17).
-3. Install the MQTT modules the way the videos show, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 4.
+3. Install the MQTT modules the way the videos show, [Video Series Here!](https://inductiveautomation.com/resources/video/mqtt-ignition) The installation guide starts on Video 5.
 4. Configure the MQTT Engine and MQTT Distribution Drivers as below. 
 ![](images/ignition1.png)
 ![](images/ignition2.png)
