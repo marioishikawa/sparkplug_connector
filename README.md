@@ -104,7 +104,7 @@ After installing Ignition the proper modules for Sparkplug-MQTT need to be insta
 
 ### **3.3 Ignition Designer**
 
-The Ignition designer launcher cant be fund at the Ignition Gateway main page top right, Install it and go trough the configuration steps. Please refer to their main page([LINK](https://inductiveautomation.com)) if any help is needed on this step. 
+The Ignition designer launcher can be foundd at the Ignition Gateway main page top right, Install it and go through the configuration steps. Please refer to their main page([LINK](https://inductiveautomation.com)) if any help is needed on this step. 
  ![](images/Designerinstall.png)
 
 
