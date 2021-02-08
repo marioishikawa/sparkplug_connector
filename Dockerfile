@@ -9,7 +9,7 @@ EXPOSE 80
 EXPOSE 3010
 
 RUN apt update
-RUN apt upgrade
-RUN apt install node
+RUN apt upgrade -y
+RUN apt install nodejs -y
 
 CMD ["node" , "server.js"]
