@@ -14,6 +14,7 @@ const session = require('express-session');
 require('./config/passport')(passport);
 const sparkplug = require('./coms/sparkplug');
 const deviceInputData = require('./coms/plcnextAPI');
+//os.networkInterfaces()
 
 const PORT = 3010 || process.env.PORT;
 const server = http.createServer(app);

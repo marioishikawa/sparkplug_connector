@@ -9,19 +9,19 @@ let readString = "";
 let varObj = {};
 let varList = [];
 let deviceInputData = {
-    "timestamp" : new Date().getTime(),
-    "metrics" : []
+    "timestamp": new Date().getTime(),
+    "metrics": []
 };
 
 
 setInterval(() => {
     //Get data dictionary and extract info
-    axios.get('https://192.168.1.10/ehmi/data.dictionary.json')
+    axios.get('https://localhost:1443/ehmi/data.dictionary.json')
         .then(resp => {
 
             varNameList = [];
             varTypeList = [];
-            
+
             Object.keys(resp.data.HmiVariables2).forEach(variable => {
                 varNameList.push(variable.slice(13));
                 varTypeList.push(resp.data.HmiVariables2[variable].Type);
@@ -41,7 +41,7 @@ setInterval(() => {
     readString = readString.substring(0, readString.length - 1);
 
     //Read from PLCnext API
-    axios.get('https://192.168.1.10/_pxc_api/api/variables/?pathPrefix=Arp.Plc.Eclr/&paths=' + readString)
+    axios.get('https://localhost:1443/_pxc_api/api/variables/?pathPrefix=Arp.Plc.Eclr/&paths=' + readString)
         .then(resp => {
             varList = [];
 
@@ -50,7 +50,7 @@ setInterval(() => {
                 varObj.name = resp.data.variables[variable].path.slice(13).replace(".", "/");
                 varObj.value = resp.data.variables[variable].value;
 
-                switch(varTypeList[variable]){
+                switch (varTypeList[variable]) {
                     case 'BOOL':
                         varObj.type = 'boolean';
                         break;
@@ -92,15 +92,17 @@ setInterval(() => {
                 }
 
                 //Must not allow any unsupported types because it can disrupt the connection if one is published.
-                if(varObj.type !== 'unknown'){
+                if (varObj.type !== 'unknown') {
                     varList.push(varObj);
                 }
-                
+
                 varObj = {};
             });
 
             deviceInputData.timestamp = new Date().getTime();
             deviceInputData.metrics = varList;
+
+	    //console.log(deviceInputData);
         })
         .catch(err => console.log("The PLCnext API cannot make a request to the PLCnext runtime at this time."));
 }, publishInterval);
