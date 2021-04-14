@@ -55,7 +55,7 @@ The Setup script will run and prompt you as below,you must select **Docker** and
 After installing Docker you can pull and run the container with the Sparkplug connector implementation by running the command below. 
 
 ```bash
-docker run -it --restart unless-stopped -p 1883:1883 -p 3010:3010 --privileged --name=sparkplug-connector  plcnextusa/sparkplug-connector:buildx-latest
+docker run -it --restart unless-stopped --network host --privileged --name=sparkplug-connector  plcnextusa/sparkplug-connector:buildx-latest
 ```
 After your container is pulled and running you can find the Sparkplug Connector Web configurator running under <plc-ip-address:3010>
 Username: admin   Password: private
