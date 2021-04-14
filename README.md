@@ -12,7 +12,7 @@ TODO's
 
 Requirements
   * Internet connection to the PLC
-  * This build will not run without an SD card additional memory, due to Node-Red storage requirements -Minimum 2GB Memory stick for AXC F series (Part# 1043501 or 1061701)
+  * This build will not run without an SD card additional memory, due to storage requirements -Minimum 2GB Memory stick for AXC F series (Part# 1043501 or 1061701)
   * Understating of PLC Web page management
   * Basic knowledge of PLCnext Engineer
   * Basic Knowledge of Ignition
