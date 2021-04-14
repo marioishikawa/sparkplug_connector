@@ -3,9 +3,9 @@
 # **PLCnext_Sparkplug**
 
 TODO's
-- [x] SSL implementation under development only use this contribution for testing !
+- [x] SSL implementation under development only use this contribution for testing!
 
-### This repo is meant to host our implementation of Sparkplug MQTT for PLCnext Controllers. 
+### This repo is a !!!ALPHA!!! meant to host our implementation of Sparkplug MQTT for PLCnext Controllers. 
 ### Here you will find How to install and How to use it for your Ignition applications
 
 ### **1 Connector Installation**
@@ -14,8 +14,8 @@ Requirements
   * Internet connection to the PLC
   * This build will not run without an SD card additional memory, due to Node-Red storage requirements -Minimum 2GB Memory stick for AXC F series (Part# 1043501 or 1061701)
   * Understating of PLC Web page management
-  * Basic knowledge on PLCnext Engineer
-  * Basic Knowledge on Ignition
+  * Basic knowledge of PLCnext Engineer
+  * Basic Knowledge of Ignition
   * root User access
 
 Supported hardware
@@ -47,7 +47,7 @@ chmod -c 777 setup.sh
 
 ./setup.sh
 ```
-the Setup script will run and prompt you as below, you must select **Docker** and enter blank for the latest version.
+The Setup script will run and prompt you as below,you must select **Docker** and enter blank for the latest version.
 ![](images/dcokerinstall.gif)
 
 ### **1.3 Pulling Container**
