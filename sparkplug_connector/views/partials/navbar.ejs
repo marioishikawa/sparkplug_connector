@@ -13,13 +13,19 @@
             <li class="nav-item" id="change-pass">
                 <a class="nav-link" href="/change-pass">User</a>
             </li>
-        </ul>
-        <ul class="navbar-nav ml-auto">
             <li class="nav-item ml-auto">
                 <a class="nav-link" href="/logout">Logout</a>
             </li>
-            <li class="connection-icon-container">
-                <img class="connection-icon" src="/assets/lan-disconnect.svg" alt="disconnected">
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            <li class="icon-style icon-container" data-tooltip="<%- sparkplugStatus.driver.state; -%>">
+                <img class="sparkplug-icon" src="/assets/cloud-question.svg" alt="cloud state">
+            </li>
+            <li class="icon-style icon-container" data-tooltip="<%- sparkplugStatus.gateway.state; -%>">
+                <img class="gateway-icon" src="/assets/gateway.svg" alt="gateway state">
+            </li>
+            <li class="icon-style icon-container" data-tooltip="<%- deviceInputData.state; -%>">
+                <img class="api-icon" src="/assets/api-unavailable.svg" alt="api state">
             </li>
         </ul>
     </div>
@@ -28,6 +34,9 @@
 <script>
     let curActiveLink = document.querySelector('.active');
     let newActiveLink = document.getElementById(window.location.pathname.substring(1));
-    curActiveLink.classList.remove('active');
-    newActiveLink.classList.add('active');
+
+    if(newActiveLink !== null){
+        curActiveLink.classList.remove('active');
+        newActiveLink.classList.add('active');
+    }
 </script>

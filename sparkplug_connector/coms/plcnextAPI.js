@@ -1,4 +1,5 @@
 const axios = require('axios');
+const logger = require('winston');
 
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //Do not require TLS certs for internal API communications.
@@ -9,6 +10,8 @@ let readString = "";
 let varObj = {};
 let varList = [];
 let deviceInputData = {
+    "isAvailable": false,
+    "state": "",
     "timestamp": new Date().getTime(),
     "metrics": []
 };
@@ -16,9 +19,11 @@ let deviceInputData = {
 
 setInterval(() => {
     //Get data dictionary and extract info
-    axios.get('https://localhost:1443/ehmi/data.dictionary.json')
+    axios.get('https://localhost/ehmi/data.dictionary.json')
         .then(resp => {
-
+            logger.info('API State: Data dictionary updated started');
+            deviceInputData.isAvailable = true;
+            deviceInputData.state = 'API State: Data dictionary updated started';
             varNameList = [];
             varTypeList = [];
 
@@ -29,7 +34,11 @@ setInterval(() => {
             varNameList.shift();
             varTypeList.shift();
         })
-        .catch(err => console.log("Updating..."));
+        .catch(err => {
+            logger.info('API State: Updating data dictionary...');
+            deviceInputData.isAvailable = false;
+            deviceInputData.state = 'API State: Updating data dictionary...';
+        });
 
     //Build new read request with updated var list
     readString = "";
@@ -41,8 +50,11 @@ setInterval(() => {
     readString = readString.substring(0, readString.length - 1);
 
     //Read from PLCnext API
-    axios.get('https://localhost:1443/_pxc_api/api/variables/?pathPrefix=Arp.Plc.Eclr/&paths=' + readString)
+    axios.get('https://localhost/_pxc_api/api/variables/?pathPrefix=Arp.Plc.Eclr/&paths=' + readString)
         .then(resp => {
+            logger.info("API State: New API data received");
+            deviceInputData.isAvailable = true;
+            deviceInputData.state = 'API State: New API data received';
             varList = [];
 
             //Format payload to be sent to Ignition
@@ -101,10 +113,15 @@ setInterval(() => {
 
             deviceInputData.timestamp = new Date().getTime();
             deviceInputData.metrics = varList;
-
-	    //console.log(deviceInputData);
+            logger.info('API State: Connected');
+            deviceInputData.state = 'API State: Connected';
+            logger.debug(`API State: API Data: ${deviceInputData}`);
         })
-        .catch(err => console.log("The PLCnext API cannot make a request to the PLCnext runtime at this time."));
+        .catch(err => {
+            logger.info('API State: Unavailable');
+            deviceInputData.state = 'API State: Unavailable (did you download a PLCnext project with an HMI component yet?)';
+            deviceInputData.isAvailable = false;
+        });
 }, publishInterval);
 
 module.exports = deviceInputData;

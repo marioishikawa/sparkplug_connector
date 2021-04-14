@@ -5,8 +5,8 @@
     <div class="row mt-5">
         <div class="col-md-6 m-auto">
             <div class="card card-body login-card">
-                <h1 class="text-center mb-3">Welcome to Ignition Gateway</h1>
-                <p class="text-center mb-3">Powered by PLCnext Technology from Phoenix Contact.</p>
+                <h1 class="text-center mb-3">Welcome to Sparkplug Gateway</h1>
+                <p class="text-center mb-3">Powered by PLCnext Technology from Phoenix Contact</p>
                 <br>
                 <%- include('partials/messages'); %>
                 <form action="/" method="POST">
@@ -17,6 +17,7 @@
                             name="username"
                             class="form-control"
                             placeholder="Enter Username"
+                            required
                         />
                     </div>
                     <div class="form-group">
@@ -26,16 +27,19 @@
                             name="password"
                             class="form-control"
                             placeholder="Enter Password"
+                            required
                         />
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Login</button>
                     <br>
                     <div class="container text-center">
                         <div>
-                            <a href="https://192.168.1.11:1443">Looking for AXC F 2152 eHMI?</a>
+                            <!-- https://192.168.1.11 -->
+                            <a href="<%- `https://${localAddress}` -%>" target="_blank">Looking for AXC F 2152 eHMI?</a>
                         </div>
                         <div>
-                            <a href="https://192.168.1.11:1443/wbm/">Looking for AXC F 2152 Web Management?</a>
+                            <!-- https://192.168.1.11 -->
+                            <a href="<%- `https://${localAddress}/wbm` -%>" target="_blank">Looking for AXC F 2152 Web Management?</a>
                         </div>
                     </div>
                 </form>

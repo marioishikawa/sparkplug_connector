@@ -4,13 +4,13 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-
+const ip = require('ip');
 
 router.get('/', (req, res) => {
-    res.render('login');
+    let localAddress = ip.address();
+    res.render('login', {localAddress});
     global.location = req.originalUrl;
 });
-
 
 router.post('/', (req, res) => {
     const { username, password  } = req.body;
@@ -30,14 +30,16 @@ router.post('/', (req, res) => {
                 });
             } else {
                 errors.push({ errorMsg: 'Incorrect username and/or password!' });
-                res.render('login', {errors});
             }
         });
     } else {
         errors.push({ errorMsg: 'Incorrect username and/or password!' });
-        res.render('login', {errors});
     }
     
+    if(errors.length > 0){
+        errors.forEach(error => req.flash('error_msg', `${error.errorMsg}`));
+        res.redirect('login');
+    }
 });
 
 module.exports = router;

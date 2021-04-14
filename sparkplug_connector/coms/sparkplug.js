@@ -9,10 +9,12 @@ const axios = require('axios');
 const { isObjEmpty, isObjArrayDiff } = require('../helpers.js');
 const EventEmitter = require('events');
 const gateway = new EventEmitter();
+const logger = require('winston');
 
 
 let publishInterval = 1000;
 let updating = false;
+let driverReady = false;
 let clientId = "";
 let config = {};
 let outputObj = {};
@@ -20,17 +22,22 @@ let deviceOutputData = {
   pathPrefix: 'Arp.Plc.Eclr/',
   variables: [],
 };
-let serverConnection = {
-  connecting: 'false',
-  connected: 'false',
-  msgCount: 0
+let sparkplugStatus = {
+  driver: {
+    connecting: 'false',
+    connected: 'false',
+    msgCount: 0,
+    state: ''
+  },
+  gateway: {
+    state: ''
+  }
 };
 
 
-console.clear();
-
 async function getConfig(){
-  console.log('Reading configurations.');
+  logger.info('Gateway State: Reading configurations.');
+  sparkplugStatus.gateway.state = "Gateway State: Reading configurations.";
   let nodeBirthCert = await fsp.readFile('./config/nodeBirthCert.json', 'utf8');
   let deviceBirthCert = await fsp.readFile('./config/deviceBirthCert.json', 'utf8');
   let deviceConfig = await fsp.readFile('./config/deviceConfig.json', 'utf8');
@@ -51,18 +58,21 @@ async function main(){
   config = await getConfig();
   clientId = config.deviceConfig.clientId;
 
-  console.log('Creating Ignition device.');
+  logger.info('Gateway State: Creating Ignition device');
+  sparkplugStatus.gateway.state = 'Gateway State: Creating Ignition device';
   sparkplugClient = SparkplugClient.newClient(config.deviceConfig);
-  serverConnection.connecting = sparkplugClient.connecting;
-  serverConnection.connected = sparkplugClient.connected;
+  sparkplugStatus.driver.connecting = sparkplugClient.connecting;
+  sparkplugStatus.driver.connected = sparkplugClient.connected;
 
-  //SPARKPLUG EVENTS
+  //DRIVER EVENTS
   sparkplugClient.on('birth', () => {
-    console.log('Publishing Node BIRTH certificate.');
+    logger.info('Gateway State: Publishing node');
+    sparkplugStatus.gateway.state = 'Gateway State: Publishing node';
     config.nodeBirthCert.timestamp = new Date().getTime();
     sparkplugClient.publishNodeBirth(config.nodeBirthCert);
 
-    console.log('Publishing Device BIRTH certificate.');
+    logger.info('Gateway State: Publishing device');
+    sparkplugStatus.gateway.state = 'Gateway State: Publishing device';
     config.deviceBirthCert.timestamp = new Date().getTime();
     sparkplugClient.publishDeviceBirth(clientId, config.deviceBirthCert);
   });
@@ -76,55 +86,73 @@ async function main(){
     }
 
     //Write to PLCnext API
-    axios.put('https://192.168.1.10/_pxc_api/api/variables/', deviceOutputData)
+    axios.put('https://localhost:1443/_pxc_api/api/variables/', deviceOutputData)
       .then(res => {
-          console.log("State: Publishing to PLCnext");
+          logger.info('API State: Publishing to PLCnext');
+          sparkplugStatus.gateway.state = 'Gateway State: Publishing to PLCnext';
       })
       .catch(err => {
-          console.log(err);
+          logger.error(err);
+          sparkplugStatus.gateway.state = `Gateway State: ${err}`;
       });
   });
 
   sparkplugClient.on('connect', () => {
-    console.log('connect');
+    logger.info('Driver State: Connected');
+    sparkplugStatus.driver.state = 'Driver State: Connected';
+    driverReady = true; //See if once connected, you can emit a birth event.
   });
 
   sparkplugClient.on('birth', () => {
-    console.log('birth');
+    logger.info('Driver State: Birth');
+    sparkplugStatus.driver.state = 'Driver State: Connected';
+    driverReady = true;
   });
 
-  sparkplugClient.on('error', () => {
-    console.log('error');
+  sparkplugClient.on('error', (e) => {
+    logger.error(`Driver State: ${e}`);
+    sparkplugStatus.driver.state = `Driver State: ${e}`;
+    driverReady = false;
   });
 
   sparkplugClient.on('close', () => {
-    console.log('close');
+    logger.info('Driver State: Closing connection');
+    sparkplugStatus.driver.state = 'Driver State: Closing connection';
+    driverReady = false;
   });
 
   sparkplugClient.on('reconnect', () => {
-    console.log('reconnect');
+    logger.info('Driver State: Reconnecting');
+    sparkplugStatus.driver.state = 'Driver State: Reconnecting';
+    driverReady = false;
   });
 
   sparkplugClient.on('offline', () => {
-    console.log('offline');
+    logger.info('Driver State: Server offline');
+    sparkplugStatus.driver.state = 'Driver State: Server offline';
+    driverReady = false;
   });
 
   //GATEWAY EVENTS
   gateway.on('updateTags', async () => {
-    console.log('State: Updating Configuration');
+    logger.info('Gateway State:  Updating configuration');
+    sparkplugStatus.gateway.state = 'Gateway State:  Updating configuration';
 
     if (isObjEmpty(deviceInputData)){
-      console.log('No PLCnext API payload.');
+      logger.info('Gateway State: No PLCnext API payload');
+      sparkplugStatus.gateway.state = 'Gateway State: No PLCnext API payload';
       updating = false;
     } else {
       fs.writeFile('./config/deviceBirthCert.json', JSON.stringify(deviceInputData), (err) => {
           if(err){
-            console.log('Error opening deviceBirthCert.json.');
+            logger.info('Gateway State: Error opening deviceBirthCert.json');
+            sparkplugStatus.gateway.state = 'Gateway State: Error opening deviceBirthCert.json';
             updating = false;
           } else {
-            console.log('deviceBirthCert.json updated.');
-            serverConnection.connecting = sparkplugClient.connecting;
-            serverConnection.connected = sparkplugClient.connected;
+            logger.info('Gateway State: deviceBirthCert.json updated.');
+            sparkplugStatus.gateway.state = 'Gateway State: deviceBirthCert.json updated';
+            sparkplugStatus.driver.connecting = sparkplugClient.connecting;
+            sparkplugStatus.driver.connected = sparkplugClient.connected;
             gateway.emit('updateDevice');
           }
         }
@@ -135,32 +163,37 @@ async function main(){
   gateway.on('updateDevice', async () => {
     config = await getConfig();
     clientId = config.deviceConfig.clientId;
-    console.log('Publishing Node BIRTH certificate.');
+    logger.info('Gateway State: Publishing node.');
+    sparkplugStatus.gateway.state = 'Gateway State: Publishing node.';
     config.nodeBirthCert.timestamp = new Date().getTime();
     sparkplugClient.publishNodeBirth(config.nodeBirthCert);
-    console.log('Publishing Device BIRTH certificate.');
+    logger.info('Gateway State: Publishing device');
+    sparkplugStatus.gateway.state = 'Gateway State: Publishing device';
     config.deviceBirthCert.timestamp = new Date().getTime();
     sparkplugClient.publishDeviceBirth(clientId, config.deviceBirthCert);
-    serverConnection.connecting = sparkplugClient.connecting;
-    serverConnection.connected = sparkplugClient.connected;
+    sparkplugStatus.driver.connecting = sparkplugClient.connecting;
+    sparkplugStatus.driver.connected = sparkplugClient.connected;
     updating = false;
   });
 
   //MAIN
   setInterval(() => {
-    if(isObjArrayDiff(deviceInputData.metrics, config.deviceBirthCert.metrics) && !updating ){
-      gateway.emit('updateTags');
-      updating = true;
-    } else if (!updating){
-      console.log('State: Publishing to Ignition');
-      sparkplugClient.publishDeviceData(clientId, deviceInputData);
-      serverConnection.connecting = sparkplugClient.connecting;
-      serverConnection.connected = sparkplugClient.connected;
-      serverConnection.msgCount++;
+    if(driverReady){
+      if(isObjArrayDiff(deviceInputData.metrics, config.deviceBirthCert.metrics) && !updating ){
+        gateway.emit('updateTags');
+        updating = true;
+      } else if (!updating){
+        logger.info('Gateway State: Publishing to Ignition');
+        sparkplugStatus.gateway.state = 'Gateway State: Publishing to Ignition';
+        sparkplugClient.publishDeviceData(clientId, deviceInputData);
+        sparkplugStatus.driver.connecting = sparkplugClient.connecting;
+        sparkplugStatus.driver.connected = sparkplugClient.connected;
+        sparkplugStatus.driver.msgCount++; //Need to put a rollover here!
+      }
     }
   }, publishInterval);
 }
 
 main();
 
-module.exports = serverConnection;
+module.exports = sparkplugStatus;

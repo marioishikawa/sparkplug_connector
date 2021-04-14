@@ -1,20 +1,28 @@
-//TODO: Check which page user is on and only send socket data to appropriate page.
-
 const socket = io();
 
 socket.on('welcomeMessage', message => {
     console.log(message);
 });
 
-socket.on('connection', status => {
-    let connectionIcon = document.querySelector('.connection-icon');
+socket.on('sparkplugConnection', sparkplugStatus => {
+    let sparkplugIcon = document.querySelector('.sparkplug-icon');
     
-    if(status.connecting){
-        connectionIcon.src = "/assets/lan-pending.svg";
-    } else if (!status.connecting && status.connected) {
-        connectionIcon.src = "/assets/lan-connect.svg";
+    if(sparkplugStatus.driver.connecting){
+        sparkplugIcon.src = "/assets/cloud-question.svg";
+    } else if (!sparkplugStatus.driver.connecting && sparkplugStatus.driver.connected) {
+        sparkplugIcon.src = "/assets/cloud-check.svg";
     } else {
-        connectionIcon.src = "/assets/lan-disconnect.svg";
+        sparkplugIcon.src = "/assets/cloud-alert.svg";
+    }
+});
+
+socket.on('apiConnection', apiStatus => {    
+    let apiIcon = document.querySelector('.api-icon');
+
+    if(apiStatus){
+        apiIcon.src = "/assets/api-available.svg";
+    } else {
+        apiIcon.src = "/assets/api-unavailable.svg";
     }
 });
 
